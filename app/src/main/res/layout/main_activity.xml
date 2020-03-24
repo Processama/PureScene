@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ImageText="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <FrameLayout
+        android:id="@+id/content_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:background="@color/colorWhite"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.example.purescene.widget.ImageText
+            android:id="@+id/scene_image_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ImageText:image="@drawable/scene"
+            ImageText:text="景点"
+            ImageText:text_color="@color/colorBlack"/>
+
+        <com.example.purescene.widget.ImageText
+            android:id="@+id/map_image_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ImageText:image="@drawable/map"
+            ImageText:text="地图"
+            ImageText:text_color="@color/colorShineBlack"/>
+
+        <com.example.purescene.widget.ImageText
+            android:id="@+id/about_image_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ImageText:image="@drawable/about"
+            ImageText:text="相关"
+            ImageText:text_color="@color/colorShineBlack"/>
+
+        <com.example.purescene.widget.ImageText
+            android:id="@+id/me_image_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ImageText:image="@drawable/me"
+            ImageText:text="我的"
+            ImageText:text_color="@color/colorShineBlack"/>
+
+    </LinearLayout>
+
+</LinearLayout>
