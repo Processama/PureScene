@@ -13,7 +13,7 @@ import com.example.purescene.R;
 import com.example.purescene.view.about.AboutFragment;
 import com.example.purescene.view.map.MapFragment;
 import com.example.purescene.view.me.MeFragment;
-import com.example.purescene.view.scenepage.SceneFragment;
+import com.example.purescene.view.scene.SceneFragment;
 import com.example.purescene.widget.ImageText;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
