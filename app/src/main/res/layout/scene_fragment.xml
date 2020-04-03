@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.v4.widget.DrawerLayout
+        android:id="@+id/scene_drawerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,7 +39,7 @@
         </LinearLayout>
 
         <fragment
-            android:id="@+id/city_fragmeng"
+            android:id="@+id/city_fragment"
             android:name="com.example.purescene.view.scene.CityFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,6 +14,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:background="@drawable/back"/>
 
         <TextView
@@ -22,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="20sp"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/colorBlack"
+            android:text="全国"/>
     </RelativeLayout>
 
     <ListView

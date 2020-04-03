@@ -2,6 +2,7 @@ package com.example.purescene.view.scene;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class SceneFragment extends Fragment implements ISceneView {
      */
     private Button mButton;
     private TextView mTextView;
-    private ListView mListiew;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class SceneFragment extends Fragment implements ISceneView {
         //初始化控件
         mButton = view.findViewById(R.id.city_button);
         mTextView = view.findViewById(R.id.city_text);
-        mListiew = view.findViewById(R.id.city_list);
+        mDrawerLayout = view.findViewById(R.id.scene_drawerlayout);
         return view;
     }
 }
