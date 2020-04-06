@@ -1,4 +1,4 @@
-package com.example.purescene.bean;
+package com.example.purescene.bean.citybean;
 
 public class UselessProvince {
     Province showapi_res_body;

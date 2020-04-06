@@ -1,14 +1,12 @@
 package com.example.purescene.presenter;
 
 
-import android.util.Log;
-
-import com.example.purescene.bean.City;
-import com.example.purescene.bean.Province;
-import com.example.purescene.bean.SpeCity;
-import com.example.purescene.bean.SpeProvince;
-import com.example.purescene.bean.UselessCity;
-import com.example.purescene.bean.UselessProvince;
+import com.example.purescene.bean.citybean.City;
+import com.example.purescene.bean.citybean.Province;
+import com.example.purescene.bean.citybean.SpeCity;
+import com.example.purescene.bean.citybean.SpeProvince;
+import com.example.purescene.bean.citybean.UselessCity;
+import com.example.purescene.bean.citybean.UselessProvince;
 import com.example.purescene.model.DataModel;
 import com.example.purescene.view.scene.ICityView;
 import com.google.gson.Gson;
@@ -71,6 +69,7 @@ public class CityPresenter {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    //获取省数据
                     Province province = mGson.fromJson(Objects.requireNonNull(response.body()).string(), UselessProvince.class).getShowapi_res_body();
                     mSpeProvince = province.getList();
                     for (SpeProvince speProvince : mSpeProvince) {
@@ -80,12 +79,12 @@ public class CityPresenter {
                         @Override
                         public void run() {
                             mCityView.queryFirstly(mData);
-                            mCityView.setViewClickListener();
                         }
                     });
                 }
             });
         } else {
+            //点击返回时，通过已有的省数据更新
             mData.clear();
             for (SpeProvince speProvince : mSpeProvince) {
                 mData.add(speProvince.getName());
@@ -107,6 +106,7 @@ public class CityPresenter {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                //获取城市数据，并进行更新，因为数据有些错误通过for进行筛选
                 mData.clear();
                 City city = mGson.fromJson(Objects.requireNonNull(response.body()).string(), UselessCity.class).getShowapi_res_body();
                 SpeCity tempSpeCity = new SpeCity();
@@ -117,6 +117,14 @@ public class CityPresenter {
                         mData.add(speCity.getCityName());
                     }
                 }
+                //对于四个直辖市没有二级城市，特殊处理将proId作为cityId，proName作为cityName
+                if (mSpeCity.size() == 0) {
+                    SpeCity speCity = new SpeCity();
+                    speCity.setCityId(mSpeProvince.get(position).getId());
+                    speCity.setCityName(mSpeProvince.get(position).getName());
+                    mSpeCity.add(speCity);
+                    mData.add(speCity.getCityName());
+                }
                 mCityView.getTheActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -125,5 +133,9 @@ public class CityPresenter {
                 });
             }
         });
+    }
+
+    public void startContentActivityWithData(int position) {
+        mCityView.startContentActivity(mSpeCity.get(position).getCityId(), mSpeCity.get(position).getCityName());
     }
 }

@@ -9,5 +9,5 @@ public interface ICityView {
     public void queryFirstly(List<String> province);
     public void queryProvince();
     public void queryCity(String cityTitle);
-    public void setViewClickListener();
+    public void startContentActivity(String cityId, String cityName);
 }

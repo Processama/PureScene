@@ -36,6 +36,11 @@
 
             </RelativeLayout>
 
+            <com.jcodecraeer.xrecyclerview.XRecyclerView
+                android:id="@+id/landscape_xrecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
 
         <fragment

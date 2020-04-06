@@ -1,6 +1,7 @@
 package com.example.purescene.view.scene;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.purescene.R;
 import com.example.purescene.presenter.CityPresenter;
+import com.example.purescene.view.activity.ContentActivity;
+import com.example.purescene.view.activity.MainActivity;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +58,9 @@ public class CityFragment extends Fragment implements ICityView {
         //设置ListView
         mArrayAdapter = new ArrayAdapter<String>(Objects.requireNonNull(getContext()), android.R.layout.simple_list_item_1, province);
         mCityListView.setAdapter(mArrayAdapter);
+
+        //设置监听事件
+        setViewClickListener();
     }
 
     /**
@@ -83,6 +89,14 @@ public class CityFragment extends Fragment implements ICityView {
         mCityListView.setSelection(0);
     }
 
+    public void startContentActivity(String cityId, String cityName) {
+        Intent intent = new Intent(getActivity(), ContentActivity.class);
+        intent.putExtra("cityId", cityId);
+        intent.putExtra("cityName", cityName);
+        startActivity(intent);
+        Objects.requireNonNull(getActivity()).finish();
+    }
+
     /**
      * 给ListView以及返回Button设置监听事件
      */
@@ -91,7 +105,17 @@ public class CityFragment extends Fragment implements ICityView {
         mCityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCityPresenter.queryCityWithData(position);
+                if (mCityTitleTextView.getText().equals("全国")) {
+                    mCityPresenter.queryCityWithData(position);
+                } else {
+                    if (getActivity() instanceof MainActivity) {
+                        mCityPresenter.startContentActivityWithData(position);
+                    } else {
+                        ContentActivity contentActivity = (ContentActivity) getActivity();
+                        contentActivity.getmSceneFragment().getmDrawerLayout().closeDrawers();
+
+                    }
+                }
             }
         });
         //设置返回Button的监听事件

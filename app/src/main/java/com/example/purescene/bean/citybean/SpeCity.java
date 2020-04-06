@@ -1,4 +1,4 @@
-package com.example.purescene.bean;
+package com.example.purescene.bean.citybean;
 
 public class SpeCity {
     private String cityId;

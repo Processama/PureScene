@@ -1,4 +1,4 @@
-package com.example.purescene.bean;
+package com.example.purescene.bean.citybean;
 
 import java.util.List;
 

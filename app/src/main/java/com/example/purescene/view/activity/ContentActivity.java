@@ -1,5 +1,6 @@
 package com.example.purescene.view.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,10 @@ import com.example.purescene.view.scene.SceneFragment;
 import com.example.purescene.widget.ImageText;
 
 public class ContentActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public SceneFragment getmSceneFragment() {
+        return (SceneFragment) mSceneFragment;
+    }
 
     /**
      * Fragment声明
@@ -67,7 +72,16 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         shineBlack = getResources().getColor(R.color.colorShineBlack,null);
         Black = getResources().getColor(R.color.colorBlack,null);
 
-        //初始切换为SceneFragment
+        //从上个Activity传来数据cityId和cityName
+        Intent mIntent = getIntent();
+        String mCityId = mIntent.getStringExtra("cityId");
+        String mCityName = mIntent.getStringExtra("cityName");
+
+        //通过bundle传递数据并初始切换为SceneFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("cityId", mCityId);
+        bundle.putString("cityName", mCityName);
+        mSceneFragment.setArguments(bundle);
         changeFragment(mSceneFragment);
     }
 
