@@ -1,4 +1,4 @@
-package com.example.purescene.view.scene;
+package com.example.purescene.view.city;
 
 import android.app.Activity;
 

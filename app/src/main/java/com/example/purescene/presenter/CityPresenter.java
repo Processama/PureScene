@@ -8,7 +8,8 @@ import com.example.purescene.bean.citybean.SpeProvince;
 import com.example.purescene.bean.citybean.UselessCity;
 import com.example.purescene.bean.citybean.UselessProvince;
 import com.example.purescene.model.DataModel;
-import com.example.purescene.view.scene.ICityView;
+import com.example.purescene.view.city.ICityView;
+import com.example.purescene.view.scene.SceneFragment;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -135,7 +136,17 @@ public class CityPresenter {
         });
     }
 
+    /**
+     * 点击城市进入新界面
+     */
     public void startContentActivityWithData(int position) {
         mCityView.startContentActivity(mSpeCity.get(position).getCityId(), mSpeCity.get(position).getCityName());
+    }
+
+    /**
+     * 切换城市
+     */
+    public void changeCityWithData(int position, SceneFragment sceneFragment) {
+        sceneFragment.changeCity(mSpeCity.get(position).getCityId(), mSpeCity.get(position).getCityName());
     }
 }

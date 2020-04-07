@@ -37,4 +37,12 @@ public class DataModel {
         HttpUtil.sendOkHttpRequest(url, callback);
     }
 
+    /**
+     * 获取景点图片
+     */
+    public void getPic(int page, Callback callback) {
+        String url = "http://route.showapi.com/852-2?showapi_appid=168422&showapi_sign=2a4402689bae4699a772b7976e707fba&type=6004&page=" + page;
+        HttpUtil.sendOkHttpRequest(url, callback);
+    }
+
 }

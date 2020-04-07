@@ -1,5 +1,8 @@
 package com.example.purescene.presenter;
 
+import com.example.purescene.bean.naturebean.Nature;
+import com.example.purescene.bean.naturebean.SpeNature;
+import com.example.purescene.bean.naturebean.UselessNature;
 import com.example.purescene.bean.scenebean.Landscape;
 import com.example.purescene.bean.scenebean.SpeLandscape;
 import com.example.purescene.bean.scenebean.UselessLandscape;
@@ -14,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,7 +34,9 @@ public class ScenePresenter {
      * 声明数据
      */
     private List<SpeLandscape> mData;
+    private List<String> mImages;
     private Gson mGson;
+    private Random mRandom;
 
     /**
      * 初始化Model和View
@@ -39,20 +45,54 @@ public class ScenePresenter {
         mDataModel = new DataModel();
         mSceneView = sceneView;
         mData = new ArrayList<>();
+        mImages = new ArrayList<>();
         mGson = new Gson();
+        mRandom = new Random();
     }
 
     /**
      * Presenter层初始化界面
      */
     public void initView(String cityId){
+        setBannerWithData();
         setXRecyclerViewWithData(cityId, SceneFragment.INIT_STATE);
+    }
+
+    /**
+     * 设置图片给banner
+     */
+    private void setBannerWithData() {
+        int page = mRandom.nextInt(25) + 1;
+        mDataModel.getPic(page, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Nature nature = mGson.fromJson(Objects.requireNonNull(response.body()).string(), UselessNature.class).getShowapi_res_body().getPagebean();
+                for (SpeNature speNature : nature.getContentlist()) {
+                    mImages.add(speNature.getList().get(0).getBig());
+                }
+                mSceneView.getTheActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> images = new ArrayList<>();
+                        for (int i = 0; i < 3; i++) {
+                            images.add(mImages.get(mRandom.nextInt(mImages.size())));
+                        }
+                        mSceneView.setBanner(images);
+                    }
+                });
+            }
+        });
     }
 
     /**
      * 设置景点数据，通过cityId从Model层取出数据设置XRecyclerView
      */
-    public void setXRecyclerViewWithData(String cityId, final int state) {
+    private void setXRecyclerViewWithData(String cityId, final int state) {
         mDataModel.getLandScape(cityId, SceneFragment.LANDSCAPE_PAGE, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -92,6 +132,7 @@ public class ScenePresenter {
     public void refreshData(String cityId) {
         SceneFragment.LANDSCAPE_PAGE = 1;
         mData.clear();
+        setBannerWithData();
         setXRecyclerViewWithData(cityId, SceneFragment.REFRESH_LOAD_STATE);
     }
 

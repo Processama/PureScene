@@ -1,8 +1,11 @@
 package com.example.purescene.bean.scenebean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class SpeLandscape {
+public class SpeLandscape implements Parcelable {
     private String areaName;
     private String summary;
     private String address;
@@ -66,4 +69,44 @@ public class SpeLandscape {
     public void setAttention(String attention) {
         this.attention = attention;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * 通过Parcelable方式序列化
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(areaName);
+        dest.writeString(summary);
+        dest.writeString(address);
+        dest.writeString(name);
+        dest.writeString(content);
+        dest.writeTypedList(picList);
+        dest.writeString(attention);
+    }
+
+    public static final Parcelable.Creator<SpeLandscape> CREATOR = new Parcelable.Creator<SpeLandscape>() {
+
+        @Override
+        public SpeLandscape createFromParcel(Parcel source) {
+            SpeLandscape speLandscape = new SpeLandscape();
+            speLandscape.areaName = source.readString();
+            speLandscape.summary = source.readString();
+            speLandscape.address = source.readString();
+            speLandscape.name = source.readString();
+            speLandscape.content = source.readString();
+            speLandscape.picList = source.createTypedArrayList(LandscapePic.CREATOR);
+            speLandscape.attention = source.readString();
+            return speLandscape;
+        }
+
+        @Override
+        public SpeLandscape[] newArray(int size) {
+            return new SpeLandscape[size];
+        }
+    };
 }

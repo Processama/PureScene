@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/city_fragment"
-        android:name="com.example.purescene.view.scene.CityFragment"
+        android:name="com.example.purescene.view.city.CityFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

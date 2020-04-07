@@ -1,6 +1,7 @@
 package com.example.purescene.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.purescene.R;
 import com.example.purescene.bean.scenebean.SpeLandscape;
+import com.example.purescene.view.activity.ContentActivity;
+import com.example.purescene.view.activity.LandscapeActivity;
 
 import java.util.List;
 
@@ -51,8 +54,7 @@ public class LandscapeAdapter extends RecyclerView.Adapter<LandscapeAdapter.Land
     @Override
     public LandscapeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.landscape_item, viewGroup, false);
-        LandscapeViewHolder landscapeViewHolder = new LandscapeViewHolder(view);
-        return landscapeViewHolder;
+        return new LandscapeViewHolder(view);
     }
 
     /**
@@ -60,7 +62,7 @@ public class LandscapeAdapter extends RecyclerView.Adapter<LandscapeAdapter.Land
      */
     @Override
     public void onBindViewHolder(@NonNull LandscapeViewHolder landscapeViewHolder, int i) {
-        SpeLandscape speLandscape = mDatas.get(i);
+        final SpeLandscape speLandscape = mDatas.get(i);
         landscapeViewHolder.landscapeNameText.setText(speLandscape.getName());
         landscapeViewHolder.landscapeSummaryText.setText(speLandscape.getSummary());
         Glide.with(mContext).load(speLandscape.getPicList().get(0).getPicUrl()).error(R.drawable.error).into(landscapeViewHolder.landscapeImage);
@@ -68,7 +70,9 @@ public class LandscapeAdapter extends RecyclerView.Adapter<LandscapeAdapter.Land
         landscapeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, LandscapeActivity.class);
+                intent.putExtra("landscape_data", speLandscape);
+                mContext.startActivity(intent);
             }
         });
     }

@@ -17,6 +17,8 @@ import com.example.purescene.view.me.MeFragment;
 import com.example.purescene.view.scene.SceneFragment;
 import com.example.purescene.widget.ImageText;
 
+import java.util.Objects;
+
 public class ContentActivity extends AppCompatActivity implements View.OnClickListener {
 
     public SceneFragment getmSceneFragment() {
@@ -49,7 +51,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.content_activity);
 
         //隐藏标题栏，设置状态栏文字颜色及图标为深色
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         //Fragment初始化

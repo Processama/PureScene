@@ -1,12 +1,14 @@
 package com.example.purescene.view.scene;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,15 @@ import android.widget.TextView;
 import com.example.purescene.R;
 import com.example.purescene.bean.scenebean.SpeLandscape;
 import com.example.purescene.presenter.ScenePresenter;
+import com.example.purescene.utils.GlideImageLoader;
 import com.example.purescene.utils.LandscapeAdapter;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -31,8 +40,9 @@ public class SceneFragment extends Fragment implements ISceneView {
     /**
      * 声明scene界面控件、presenter
      */
-    private Button mButton;
-    private TextView mTextView;
+    private View mHeadView;
+    private Banner mBanner;
+    private TextView mCityNameTextView;
     private DrawerLayout mDrawerLayout;
     private XRecyclerView mLandscapeXrecyclerView;
     private LandscapeAdapter mLandscapeAdapter;
@@ -55,15 +65,25 @@ public class SceneFragment extends Fragment implements ISceneView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scene_fragment, container, false);
-        //初始化控件
-        mButton = view.findViewById(R.id.city_button);
-        mTextView = view.findViewById(R.id.city_text);
+        //初始化控件，解析头布局，将banner加进来
+        mHeadView = LayoutInflater.from(getContext()).inflate(R.layout.banner_layout,null,false);
+        mBanner = mHeadView.findViewById(R.id.ad_banner);
+        Button mNavButton = view.findViewById(R.id.city_button);
+        mCityNameTextView = view.findViewById(R.id.city_text);
         mDrawerLayout = view.findViewById(R.id.scene_drawerlayout);
         mLandscapeXrecyclerView = view.findViewById(R.id.landscape_xrecyclerview);
         mScenePresenter = new ScenePresenter(this);
+
+        //设置按钮点击事件用于切换城市
+        mNavButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.START);
+            }
+        });
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -75,11 +95,30 @@ public class SceneFragment extends Fragment implements ISceneView {
     }
 
     /**
+     * View层设置Banner,具体设置banner样式
+     */
+    public void setBanner(List<String> images) {
+        //设置banner样式
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        //设置banner图片加载器
+        mBanner.setImageLoader(new GlideImageLoader());
+        //设置图片
+        mBanner.setImages(images);
+        //设置动画
+        mBanner.setBannerAnimation(Transformer.DepthPage);
+        //设置轮播时间
+        mBanner.setDelayTime(3000);
+        mBanner.start();
+    }
+
+    /**
      * 通过presenter层获取景点数据，设置XRecyclerView
      */
     public void setViewFirstly(List<SpeLandscape> speLandscapes) {
         //设置TextView
-        mTextView.setText(mCityName);
+        mCityNameTextView.setText(mCityName);
+        //设置headView，包含banner
+        mLandscapeXrecyclerView.addHeaderView(mHeadView);
         //设置LayoutManager和Adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -121,8 +160,23 @@ public class SceneFragment extends Fragment implements ISceneView {
         });
     }
 
+    /**
+     * 更新数据
+     */
     public void notifyData() {
         mLandscapeAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 切换城市
+     */
+    public void changeCity(String cityId, String cityName) {
+        //更新cityId，cityName
+        mCityId = cityId;
+        mCityName = cityName;
+        //设置TextView
+        mCityNameTextView.setText(mCityName);
+        mScenePresenter.refreshData(mCityId);
     }
 
     /**

@@ -3,8 +3,8 @@ package com.example.purescene.bean.scenebean;
 import java.util.List;
 
 public class Landscape {
-    int allPages;
-    List<SpeLandscape> contentlist;
+    private int allPages;
+    private List<SpeLandscape> contentlist;
 
     public int getAllPages() {
         return allPages;

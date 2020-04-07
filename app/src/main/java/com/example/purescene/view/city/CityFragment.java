@@ -1,4 +1,4 @@
-package com.example.purescene.view.scene;
+package com.example.purescene.view.city;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import com.example.purescene.R;
 import com.example.purescene.presenter.CityPresenter;
 import com.example.purescene.view.activity.ContentActivity;
 import com.example.purescene.view.activity.MainActivity;
+import com.example.purescene.view.scene.SceneFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +41,7 @@ public class CityFragment extends Fragment implements ICityView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.city_fragment, container, false);
         //初始化控件、Presenter
@@ -112,8 +115,10 @@ public class CityFragment extends Fragment implements ICityView {
                         mCityPresenter.startContentActivityWithData(position);
                     } else {
                         ContentActivity contentActivity = (ContentActivity) getActivity();
-                        contentActivity.getmSceneFragment().getmDrawerLayout().closeDrawers();
-
+                        assert contentActivity != null;
+                        SceneFragment sceneFragment = contentActivity.getmSceneFragment();
+                        sceneFragment.getmDrawerLayout().closeDrawers();
+                        mCityPresenter.changeCityWithData(position, sceneFragment);
                     }
                 }
             }

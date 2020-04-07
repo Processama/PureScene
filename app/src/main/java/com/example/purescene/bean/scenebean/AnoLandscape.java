@@ -1,7 +1,7 @@
 package com.example.purescene.bean.scenebean;
 
 public class AnoLandscape {
-    Landscape pagebean;
+    private Landscape pagebean;
 
     public Landscape getPagebean() {
         return pagebean;
