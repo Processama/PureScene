@@ -109,6 +109,7 @@ public class CityPresenter {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 //获取城市数据，并进行更新，因为数据有些错误通过for进行筛选
                 mData.clear();
+                mSpeCity.clear();
                 City city = mGson.fromJson(Objects.requireNonNull(response.body()).string(), UselessCity.class).getShowapi_res_body();
                 SpeCity tempSpeCity = new SpeCity();
                 for (SpeCity speCity : city.getList()) {
@@ -147,6 +148,6 @@ public class CityPresenter {
      * 切换城市
      */
     public void changeCityWithData(int position, SceneFragment sceneFragment) {
-        sceneFragment.changeCity(mSpeCity.get(position).getCityId(), mSpeCity.get(position).getCityName());
+        sceneFragment.changeCity(mSpeCity.get(position). getCityId(), mSpeCity.get(position).getCityName());
     }
 }

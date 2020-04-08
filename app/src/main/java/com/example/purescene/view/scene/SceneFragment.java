@@ -20,6 +20,7 @@ import com.example.purescene.bean.scenebean.SpeLandscape;
 import com.example.purescene.presenter.ScenePresenter;
 import com.example.purescene.utils.GlideImageLoader;
 import com.example.purescene.utils.LandscapeAdapter;
+import com.example.purescene.view.activity.SearchActivity;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -30,16 +31,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SceneFragment extends Fragment implements ISceneView {
+public class SceneFragment extends Fragment implements ISceneView,  View.OnClickListener {
     /**
-     * 三种状态，分别时第一次打开，刷新，加载
+     * 两种状态，分别时第一次打开，刷新加载
      */
     public final static int INIT_STATE = 0;
     public final static int REFRESH_LOAD_STATE = 1;
 
-    /**
-     * 声明scene界面控件、presenter
-     */
     private View mHeadView;
     private Banner mBanner;
     private TextView mCityNameTextView;
@@ -71,20 +69,19 @@ public class SceneFragment extends Fragment implements ISceneView {
         //初始化控件，解析头布局，将banner加进来
         mHeadView = LayoutInflater.from(getContext()).inflate(R.layout.banner_layout,null,false);
         mBanner = mHeadView.findViewById(R.id.ad_banner);
+        /**
+         * 声明scene界面控件、presenter
+         */
         Button mNavButton = view.findViewById(R.id.city_button);
+        Button mSearchButton = view.findViewById(R.id.search_button);
         mCityNameTextView = view.findViewById(R.id.city_text);
         mDrawerLayout = view.findViewById(R.id.scene_drawerlayout);
         mLandscapeXrecyclerView = view.findViewById(R.id.landscape_xrecyclerview);
         mScenePresenter = new ScenePresenter(this);
 
-        //设置按钮点击事件用于切换城市
-        mNavButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.START);
-            }
-        });
-
+        //设置按钮点击事件用于切换城市、搜索
+        mSearchButton.setOnClickListener(this);
+        mNavButton.setOnClickListener(this);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mCityId = bundle.getString("cityId");
@@ -92,6 +89,21 @@ public class SceneFragment extends Fragment implements ISceneView {
         }
         mScenePresenter.initView(mCityId);
         return view;
+    }
+
+    /**
+     * 按钮点击事件
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.city_button:
+                mDrawerLayout.openDrawer(Gravity.START);
+                break;
+            case R.id.search_button:
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+        }
     }
 
     /**
@@ -185,4 +197,5 @@ public class SceneFragment extends Fragment implements ISceneView {
     public Activity getTheActivity(){
         return getActivity();
     }
+
 }
