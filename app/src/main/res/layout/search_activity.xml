@@ -11,9 +11,8 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:background="@drawable/search"/>
 
@@ -22,18 +21,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="13"
+            android:layout_weight="1"
             android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
             android:singleLine="true"/>
 
         <TextView
             android:id="@+id/cancel_text"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:layout_gravity="center"
-            android:gravity="center"
             android:text="@string/cancel_text"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"/>

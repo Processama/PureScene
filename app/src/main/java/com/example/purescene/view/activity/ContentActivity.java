@@ -25,6 +25,10 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         return (SceneFragment) mSceneFragment;
     }
 
+    public MapFragment getmMapFragment() {
+        return (MapFragment) mMapFragment;
+    }
+
     /**
      * Fragment声明
      */

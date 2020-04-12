@@ -25,7 +25,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             ImageText:image="@drawable/scene"
-            ImageText:text="景点"
+            ImageText:image_width="20dp"
+            ImageText:image_height="20dp"
+            ImageText:text="@string/scene"
+            ImageText:text_size="10sp"
             ImageText:text_color="@color/colorBlack"/>
 
         <com.example.purescene.widget.ImageText
@@ -34,7 +37,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             ImageText:image="@drawable/map"
-            ImageText:text="地图"
+            ImageText:image_width="20dp"
+            ImageText:image_height="20dp"
+            ImageText:text="@string/map"
+            ImageText:text_size="10sp"
             ImageText:text_color="@color/colorShineBlack"/>
 
         <com.example.purescene.widget.ImageText
@@ -43,8 +49,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             ImageText:image="@drawable/about"
-            ImageText:text="相关"
-            ImageText:text_color="@color/colorShineBlack"/>
+            ImageText:image_width="20dp"
+            ImageText:image_height="20dp"
+            ImageText:text="@string/about"
+            ImageText:text_size="10sp"
+            ImageText:text_color="@color/colorShineBlack" />
 
         <com.example.purescene.widget.ImageText
             android:id="@+id/me_image_text"
@@ -52,7 +61,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             ImageText:image="@drawable/me"
+            ImageText:image_width="20dp"
+            ImageText:image_height="20dp"
             ImageText:text="我的"
+            ImageText:text_size="10sp"
             ImageText:text_color="@color/colorShineBlack"/>
 
     </LinearLayout>

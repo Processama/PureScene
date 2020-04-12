@@ -3,6 +3,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scene">景点</string>
+    <string name="map">地图</string>
+    <string name="about">相关</string>
     <string name="search_hint">例如输入：泰山</string>
     <string name="cancel_text">取消</string>
+    <string name="map_type">地图类型</string>
+    <string name="map_setting">地图设置(可多选)</string>
+    <string name="normal_map">2d平面图</string>
+    <string name="satellite_map">卫星图</string>
+    <string name="situation">路况</string>
+    <string name="temperature">热力图</string>
+    <string name="map_option">地图选项</string>
 </resources>
