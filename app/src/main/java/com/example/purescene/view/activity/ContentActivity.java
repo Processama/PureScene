@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.example.purescene.R;
 import com.example.purescene.view.about.AboutFragment;
@@ -114,20 +115,26 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     /**
      * 点击下方自定义按钮切换fragment以及改变文字颜色
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.scene_image_text:
                 changeFragment(mSceneFragment);
                 resetImgTextColor(mSceneImageText);
+                //如果是景点和相关界面不使用沉浸式，clear即可
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 break;
             case R.id.map_image_text:
                 changeFragment(mMapFragment);
                 resetImgTextColor(mMapImagetText);
+                //地图界面使用沉浸式状态栏，这样地图美观
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 break;
             case R.id.about_image_text:
                 changeFragment(mAboutFragment);
                 resetImgTextColor(mAboutImageText);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 break;
             case R.id.me_image_text:
                 changeFragment(mMeFragment);

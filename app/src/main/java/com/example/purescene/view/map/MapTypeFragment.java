@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.purescene.R;
 import com.example.purescene.view.activity.ContentActivity;
+import com.example.purescene.view.activity.RouteSearchActivity;
 import com.example.purescene.widget.ImageText;
 
 public class MapTypeFragment extends Fragment implements View.OnClickListener {
@@ -50,8 +52,14 @@ public class MapTypeFragment extends Fragment implements View.OnClickListener {
         mBlack = getResources().getColor(R.color.colorBlack,null);
         mShineBlack = getResources().getColor(R.color.colorShineBlack,null);
 
-        ContentActivity contentActivity = (ContentActivity) getActivity();
-        mMapView = contentActivity.getmMapFragment();
+        if (getActivity() instanceof ContentActivity) {
+            ContentActivity contentActivity = (ContentActivity) getActivity();
+            mMapView = contentActivity.getmMapFragment();
+        } else if (getActivity() instanceof RouteSearchActivity) {
+            RouteSearchActivity routeSearchActivity = (RouteSearchActivity) getActivity();
+            mMapView = routeSearchActivity.getmMapFragment();
+        }
+
         return view;
     }
 

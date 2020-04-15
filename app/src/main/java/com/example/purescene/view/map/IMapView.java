@@ -5,4 +5,6 @@ public interface IMapView {
     public void setSalliteMap();
     public void setSituation(boolean situation);
     public void setTemeprature(boolean temperature);
+    public void setSearchLayoutGone();
+    public void routeSearch(String start, String end, int way);
 }

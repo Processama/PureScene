@@ -10,39 +10,90 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <Button
-                    android:id="@+id/location_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/location"/>
-
-                <Button
-                    android:id="@+id/map_option_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/option"/>
-
-            </RelativeLayout>
+            android:layout_height="match_parent">
 
             <com.baidu.mapapi.map.MapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true" />
+                android:clickable="true"/>
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/search_route_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                android:background="@color/colorWhite">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/search"/>
+
+                <EditText
+                    android:id="@+id/search_route_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/search_route_hint"
+                    android:textSize="15sp"
+                    android:background="@color/colorWhite"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:background="@color/colorWhite"
+                android:layout_gravity="end"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="8dp">
+
+                <com.example.purescene.widget.ImageText
+                    android:id="@+id/map_option_image_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    ImageText:image="@drawable/option"
+                    ImageText:image_width="25dp"
+                    ImageText:image_height="25dp"
+                    ImageText:text="@string/map_option"
+                    ImageText:text_size="10sp"
+                    ImageText:text_color="@color/colorBlack"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorWhite"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="100dp"
+                android:layout_marginStart="8dp">
+
+                <Button
+                    android:id="@+id/location_button"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/location" />
+
+            </FrameLayout>
+
+        </FrameLayout>
 
         <fragment
             android:id="@+id/map_type_fragment"

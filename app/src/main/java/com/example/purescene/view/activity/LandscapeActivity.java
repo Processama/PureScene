@@ -1,6 +1,7 @@
 package com.example.purescene.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.purescene.R;
 import com.example.purescene.bean.scenebean.SpeLandscape;
+import com.example.purescene.widget.ImageText;
 
 import java.util.Objects;
 
@@ -30,6 +32,9 @@ public class LandscapeActivity extends AppCompatActivity {
     private ImageView mLandscapeImage_3;
 
     private SpeLandscape mSpeLandscape;
+
+    public LandscapeActivity() {
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -52,7 +57,15 @@ public class LandscapeActivity extends AppCompatActivity {
         mLandscapeImage_3 = findViewById(R.id.landscape_image_view_3);
 
         mSpeLandscape = getIntent().getParcelableExtra("landscape_data");
-
+        ImageText searchRouteImageText = findViewById(R.id.search_route_image_text);
+        searchRouteImageText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LandscapeActivity.this, RouteSearchActivity.class);
+                intent.putExtra("landscape_name", mSpeLandscape.getName());
+                startActivity(intent);
+            }
+        });
         setView();
     }
 

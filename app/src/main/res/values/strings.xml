@@ -14,5 +14,13 @@
     <string name="satellite_map">卫星图</string>
     <string name="situation">路况</string>
     <string name="temperature">热力图</string>
-    <string name="map_option">地图选项</string>
+    <string name="map_option">图层</string>
+    <string name="search_route_hint">点击查找路线</string>
+    <string name="now_location">我的位置</string>
+    <string name="type_start">输入起点</string>
+    <string name="type_end">输入终点</string>
+    <string name="walking">步行</string>
+    <string name="riding">骑行</string>
+    <string name="driving">驾车</string>
+    <string name="search_route">查看路线</string>
 </resources>
