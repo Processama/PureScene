@@ -55,18 +55,6 @@
             ImageText:text_size="10sp"
             ImageText:text_color="@color/colorShineBlack" />
 
-        <com.example.purescene.widget.ImageText
-            android:id="@+id/me_image_text"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            ImageText:image="@drawable/me"
-            ImageText:image_width="20dp"
-            ImageText:image_height="20dp"
-            ImageText:text="我的"
-            ImageText:text_size="10sp"
-            ImageText:text_color="@color/colorShineBlack"/>
-
     </LinearLayout>
 
 </LinearLayout>

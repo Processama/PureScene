@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import com.example.purescene.R;
 import com.example.purescene.view.about.AboutFragment;
 import com.example.purescene.view.map.MapFragment;
-import com.example.purescene.view.me.MeFragment;
 import com.example.purescene.view.scene.SceneFragment;
 import com.example.purescene.widget.ImageText;
 
@@ -36,7 +35,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private Fragment mSceneFragment;
     private Fragment mMapFragment;
     private Fragment mAboutFragment;
-    private Fragment mMeFragment;
     private FragmentManager mFragmentManager;
 
     /**
@@ -45,7 +43,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private ImageText mSceneImageText;
     private ImageText mMapImagetText;
     private ImageText mAboutImageText;
-    private ImageText mMeImageText;
     private int shineBlack;
     private int Black;
 
@@ -63,7 +60,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         mSceneFragment = new SceneFragment();
         mMapFragment = new MapFragment();
         mAboutFragment = new AboutFragment();
-        mMeFragment = new MeFragment();
         mFragmentManager = getSupportFragmentManager();
 
         //ImageText初始化
@@ -73,8 +69,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         mMapImagetText.setOnClickListener(this);
         mAboutImageText = findViewById(R.id.about_image_text);
         mAboutImageText.setOnClickListener(this);
-        mMeImageText = findViewById(R.id.me_image_text);
-        mMeImageText.setOnClickListener(this);
 
         shineBlack = getResources().getColor(R.color.colorShineBlack,null);
         Black = getResources().getColor(R.color.colorBlack,null);
@@ -108,7 +102,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         mSceneImageText.setTextColor(shineBlack);
         mMapImagetText.setTextColor(shineBlack);
         mAboutImageText.setTextColor(shineBlack);
-        mMeImageText.setTextColor(shineBlack);
         imageText.setTextColor(Black);
     }
 
@@ -135,10 +128,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 changeFragment(mAboutFragment);
                 resetImgTextColor(mAboutImageText);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                break;
-            case R.id.me_image_text:
-                changeFragment(mMeFragment);
-                resetImgTextColor(mMeImageText);
                 break;
         }
     }
