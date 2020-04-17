@@ -347,12 +347,22 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
          if (start.equals("我的位置")) {
              stNode = PlanNode.withLocation(mLanlng);
          } else {
-             stNode = PlanNode.withCityNameAndPlaceName("", start);
+             String[] str = start.split("\\s+");
+             if (str.length > 1) {
+                 stNode = PlanNode.withCityNameAndPlaceName(str[0], str[1]);
+             } else {
+                 stNode = PlanNode.withCityNameAndPlaceName("", start);
+             }
          }
          if (end.equals("我的位置")) {
              enNode = PlanNode.withLocation(mLanlng);
          } else {
-             enNode = PlanNode.withCityNameAndPlaceName("", end);
+             String[] ed = end.split("\\s+");
+             if (ed.length > 1) {
+                 enNode = PlanNode.withCityNameAndPlaceName(ed[0], ed[1]);
+             } else {
+                 enNode = PlanNode.withCityNameAndPlaceName("", end);
+             }
          }
          switch (way) {
             case WALKING_SEARCH:

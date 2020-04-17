@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.List;
 
 public class SpeLandscape implements Parcelable {
+    private String cityName;
     private String areaName;
     private String summary;
     private String address;
@@ -13,6 +14,14 @@ public class SpeLandscape implements Parcelable {
     private String content;
     private List<LandscapePic> picList;
     private String attention;
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 
     public String getAreaName() {
         return areaName;
@@ -80,6 +89,7 @@ public class SpeLandscape implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cityName);
         dest.writeString(areaName);
         dest.writeString(summary);
         dest.writeString(address);
@@ -94,6 +104,7 @@ public class SpeLandscape implements Parcelable {
         @Override
         public SpeLandscape createFromParcel(Parcel source) {
             SpeLandscape speLandscape = new SpeLandscape();
+            speLandscape.cityName = source.readString();
             speLandscape.areaName = source.readString();
             speLandscape.summary = source.readString();
             speLandscape.address = source.readString();

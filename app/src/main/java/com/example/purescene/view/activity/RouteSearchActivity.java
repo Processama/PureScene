@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -78,8 +79,10 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
         searchRoute();
 
         Intent intent = getIntent();
+        String cityName = intent.getStringExtra("city_name");
         String landscapeNmae = intent.getStringExtra("landscape_name");
-        mEndEidtText.setText(landscapeNmae);
+        String endText = cityName + " " + landscapeNmae;
+        mEndEidtText.setText(endText);
     }
 
     @Override

@@ -17,8 +17,8 @@
     <string name="map_option">图层</string>
     <string name="search_route_hint">点击查找路线</string>
     <string name="now_location">我的位置</string>
-    <string name="type_start">输入起点</string>
-    <string name="type_end">输入终点</string>
+    <string name="type_start">输入起点，例如：南昌 梅岭</string>
+    <string name="type_end">输入终点，例如：九江 庐山</string>
     <string name="walking">步行</string>
     <string name="riding">骑行</string>
     <string name="driving">驾车</string>

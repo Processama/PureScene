@@ -63,6 +63,7 @@ public class LandscapeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LandscapeActivity.this, RouteSearchActivity.class);
                 intent.putExtra("landscape_name", mSpeLandscape.getName());
+                intent.putExtra("city_name", mSpeLandscape.getCityName());
                 startActivity(intent);
             }
         });
