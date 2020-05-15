@@ -106,10 +106,37 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/route_map_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite"/>
+        android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/route_map_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"/>
+
+        <FrameLayout
+            android:id="@+id/navi_framelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="15dp"
+            android:background="@color/colorWhite"
+            android:visibility="gone">
+
+            <com.example.purescene.widget.ImageText
+                android:id="@+id/navi_image_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                ImageText:image="@drawable/navigation"
+                ImageText:image_width="40dp"
+                ImageText:image_height="40dp"
+                ImageText:text="@string/navigation"
+                ImageText:text_size="20sp"
+                ImageText:text_color="@color/colorBlack" />
+
+        </FrameLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

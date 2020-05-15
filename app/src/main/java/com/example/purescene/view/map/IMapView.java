@@ -7,4 +7,5 @@ public interface IMapView {
     public void setTemeprature(boolean temperature);
     public void setSearchLayoutGone();
     public void routeSearch(String start, String end, int way);
+    public void getSpotInfo(String end, int way);
 }

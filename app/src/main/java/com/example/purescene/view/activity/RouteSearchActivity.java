@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
     private ImageText mWalkingImageText;
     private ImageText mBikingImageText;
     private ImageText mDrivingImageText;
+    private FrameLayout mNaviFrameLayout;
+    private ImageText mNaviImageText;
 
     private int mWay;
     private int mBlack;
@@ -71,6 +74,9 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
         mBikingImageText.setOnClickListener(this);
         mDrivingImageText = findViewById(R.id.driving_image_text);
         mDrivingImageText.setOnClickListener(this);
+        mNaviFrameLayout = findViewById(R.id.navi_framelayout);
+        mNaviImageText = findViewById(R.id.navi_image_text);
+        mNaviImageText.setOnClickListener(this);
 
         mWay = MapFragment.WALKING_SEARCH;
         mBlack = getResources().getColor(R.color.colorBlack,null);
@@ -78,11 +84,14 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
 
         searchRoute();
 
+        //从景点界面跳转获取终点信息
         Intent intent = getIntent();
         String cityName = intent.getStringExtra("city_name");
         String landscapeNmae = intent.getStringExtra("landscape_name");
-        String endText = cityName + " " + landscapeNmae;
-        mEndEidtText.setText(endText);
+        if (cityName != null && landscapeNmae != null) {
+            String endText = cityName + " " + landscapeNmae;
+            mEndEidtText.setText(endText);
+        }
     }
 
     @Override
@@ -104,7 +113,7 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * 各控件实现点击事件：取消、切换路线方式
+     * 各控件实现点击事件：取消、切换路线方式、导航
      */
     @Override
     public void onClick(View v) {
@@ -134,6 +143,9 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
                 if (!start.equals("") && !end.equals("")) {
                     mMapView.routeSearch(start, end, mWay);
                 }
+                break;
+            case R.id.navi_image_text:
+                mMapView.getSpotInfo(end, mWay);
                 break;
         }
     }
@@ -169,6 +181,7 @@ public class RouteSearchActivity extends AppCompatActivity implements View.OnCli
                         Toast.makeText(RouteSearchActivity.this, "起点以及终点内容不能为空", Toast.LENGTH_SHORT).show();
                     } else {
                         mMapView.routeSearch(start, end, mWay);
+                        mNaviFrameLayout.setVisibility(View.VISIBLE);
                         return true;
                     }
                 }

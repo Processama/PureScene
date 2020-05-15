@@ -22,13 +22,23 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.bikenavi.BikeNavigateHelper;
+import com.baidu.mapapi.bikenavi.adapter.IBEngineInitListener;
+import com.baidu.mapapi.bikenavi.adapter.IBRoutePlanListener;
+import com.baidu.mapapi.bikenavi.model.BikeRoutePlanError;
+import com.baidu.mapapi.bikenavi.params.BikeNaviLaunchParam;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.route.BikingRoutePlanOption;
 import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
@@ -38,16 +48,21 @@ import com.baidu.mapapi.search.route.MassTransitRouteResult;
 import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRoutePlanOption;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.baidu.mapapi.walknavi.WalkNavigateHelper;
+import com.baidu.mapapi.walknavi.adapter.IWEngineInitListener;
+import com.baidu.mapapi.walknavi.adapter.IWRoutePlanListener;
+import com.baidu.mapapi.walknavi.model.WalkRoutePlanError;
+import com.baidu.mapapi.walknavi.params.WalkNaviLaunchParam;
 import com.example.purescene.R;
 import com.example.purescene.utils.overlayutil.BikingRouteOverlay;
 import com.example.purescene.utils.overlayutil.DrivingRouteOverlay;
-import com.example.purescene.utils.overlayutil.TransitRouteOverlay;
 import com.example.purescene.utils.overlayutil.WalkingRouteOverlay;
+import com.example.purescene.view.activity.BNaviGuideActivity;
 import com.example.purescene.view.activity.RouteSearchActivity;
+import com.example.purescene.view.activity.WNaviGuideActivity;
 import com.example.purescene.widget.ImageText;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +94,7 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
      * 定位
      */
     private LocationClient mLocationClient;
-    private LatLng mLanlng;
+    private LatLng mLatLng;
 
     /**
      * 路线规划
@@ -88,6 +103,13 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
     private WalkingRouteOverlay mWalkingRouteOverlay;
     private BikingRouteOverlay mBikingRouteOverlay;
     private DrivingRouteOverlay mDrivingRouteOverlay;
+
+    /**
+     * 地理编码
+     */
+    private GeoCoder mGeoCoder;
+    private LatLng mTempLatLng;
+    private int mNavigationWay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +150,45 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
 
         //初始化路线规划
         searchSpot();
+
+        //初始化导航
+        initBikeNavigation();
+        initNavigation();
+
+        //创建地理编码检索实例
+        mGeoCoder = GeoCoder.newInstance();
+        mGeoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+                if (null != geoCodeResult && null != geoCodeResult.getLocation()) {
+                    if (geoCodeResult == null || geoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                        //没有检索到结果
+                        return;
+                    } else {
+                        double latitude = geoCodeResult.getLocation().latitude;
+                        double longitude = geoCodeResult.getLocation().longitude;
+                        mTempLatLng = new LatLng(latitude, longitude);
+                        switch (mNavigationWay) {
+                            case WALKING_SEARCH:
+                                startNavigation(mLatLng, mTempLatLng);
+                                break;
+                            case BIKING_SEARCH:
+                                startBikeNavigation(mLatLng, mTempLatLng);
+                                break;
+                            case DRIVING_SEARCH:
+                                Toast.makeText(getContext(), "很抱歉，暂未开通骑行导航功能", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+
+            }
+        });
         return view;
     }
 
@@ -145,7 +206,7 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
                 mMapDrawerLayout.openDrawer(Gravity.END);
                 break;
             case R.id.location_button:
-                MapStatusUpdate status = MapStatusUpdateFactory.newLatLngZoom(mLanlng, 17.0f);
+                MapStatusUpdate status = MapStatusUpdateFactory.newLatLngZoom(mLatLng, 17.0f);
                 mBaiduMap.setMapStatus(status);
                 break;
         }
@@ -257,11 +318,11 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
                     .direction(location.getDirection()).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
-            mLanlng = new LatLng(location.getLatitude(), location.getLongitude());
+            mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             //第一次打开时直接定位，以定位点为中心，并设置层级为17即比例尺100米
             if (flag) {
-                MapStatusUpdate status = MapStatusUpdateFactory.newLatLngZoom(mLanlng, 17.0f);
+                MapStatusUpdate status = MapStatusUpdateFactory.newLatLngZoom(mLatLng, 17.0f);
                 mBaiduMap.setMapStatus(status);
                 flag = false;
             }
@@ -345,7 +406,7 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
          PlanNode stNode;
          PlanNode enNode;
          if (start.equals("我的位置")) {
-             stNode = PlanNode.withLocation(mLanlng);
+             stNode = PlanNode.withLocation(mLatLng);
          } else {
              String[] str = start.split("\\s+");
              if (str.length > 1) {
@@ -355,7 +416,7 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
              }
          }
          if (end.equals("我的位置")) {
-             enNode = PlanNode.withLocation(mLanlng);
+             enNode = PlanNode.withLocation(mLatLng);
          } else {
              String[] ed = end.split("\\s+");
              if (ed.length > 1) {
@@ -388,6 +449,120 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
      }
 
     /**
+     * 导航前获取经纬度,适配获取步行、骑行两种方式
+     */
+    public void getSpotInfo(String end, int way) {
+        String[] ed = end.split("\\s+");
+        if (ed.length > 1) {
+            mNavigationWay = way;
+            mGeoCoder.geocode(new GeoCodeOption()
+                    .city(ed[0])
+                    .address(ed[1]));
+        } else {
+            Toast.makeText(getContext(), "需要详细位置信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    /**
+     * 初始化步行导航
+     */
+    public void initNavigation() {
+        // 获取导航控制类
+        // 引擎初始化
+        WalkNavigateHelper.getInstance().initNaviEngine(getActivity(), new IWEngineInitListener() {
+
+            @Override
+            public void engineInitSuccess() {
+                //引擎初始化成功的回调
+            }
+
+            @Override
+            public void engineInitFail() {
+                //引擎初始化失败的回调
+            }
+        });
+    }
+
+    /**
+     * 发起导航，在另一个界面获取起终点值后调用
+     */
+    public void startNavigation(LatLng startPt, LatLng endPt) {
+        //构造WalkNaviLaunchParam
+        WalkNaviLaunchParam mParam = new WalkNaviLaunchParam().stPt(startPt).endPt(endPt);
+
+        //发起算路
+        WalkNavigateHelper.getInstance().routePlanWithParams(mParam, new IWRoutePlanListener() {
+            @Override
+            public void onRoutePlanStart() {
+                //开始算路的回调
+            }
+
+            @Override
+            public void onRoutePlanSuccess() {
+                //算路成功
+                //跳转至诱导页面
+                Intent intent = new Intent(getContext(), WNaviGuideActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onRoutePlanFail(WalkRoutePlanError walkRoutePlanError) {
+                //算路失败的回调
+            }
+        });
+    }
+
+    /**
+     * 初始化骑行导航
+     */
+    public void initBikeNavigation() {
+        // 获取导航控制类
+        // 引擎初始化
+        BikeNavigateHelper.getInstance().initNaviEngine(getActivity(), new IBEngineInitListener() {
+            @Override
+            public void engineInitSuccess() {
+                //骑行导航初始化成功之后的回调
+            }
+
+            @Override
+            public void engineInitFail() {
+                //骑行导航初始化失败之后的回调
+            }
+        });
+    }
+
+    /**
+     * 发起骑行导航
+     */
+    public void startBikeNavigation(LatLng startPt, LatLng endPt) {
+        //构造BikeNaviLaunchParam
+        //.vehicle(0)默认的普通骑行导航
+        BikeNaviLaunchParam mParam = new BikeNaviLaunchParam().stPt(startPt).endPt(endPt).vehicle(0);
+
+        //发起算路
+        BikeNavigateHelper.getInstance().routePlanWithParams(mParam, new IBRoutePlanListener() {
+            @Override
+            public void onRoutePlanStart() {
+                //执行算路开始的逻辑
+            }
+
+            @Override
+            public void onRoutePlanSuccess() {
+                //算路成功
+                //跳转至诱导页面
+                Intent intent = new Intent(getContext(), BNaviGuideActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onRoutePlanFail(BikeRoutePlanError bikeRoutePlanError) {
+                //执行算路失败的逻辑
+            }
+        });
+    }
+
+    /**
      * 设置在路线Activity中搜索框的整个布局为GONE
      */
     public void setSearchLayoutGone() {
@@ -415,6 +590,7 @@ public class MapFragment extends Fragment implements IMapView, View.OnClickListe
         mMapView.onDestroy();
         mMapView = null;
         mRoutePlanSearch.destroy();
+        mGeoCoder.destroy();
     }
 
 }
